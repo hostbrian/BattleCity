@@ -11,11 +11,14 @@
 
 #include <iostream>
 #include "cocos2d.h"
+#include "RoleControl.h"
 using namespace cocos2d;
 
 class GameScene : public Layer{
 private:
-    Layer * MAP;
+    virtual void onEnter();
+private:
+    Layer * TITLEMAP;
 public:
     virtual bool init();
     static Scene * createScene();

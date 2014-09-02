@@ -37,7 +37,6 @@ int BaseMap::getTypeForPoint(Vec2 _vec2){
     
     int gid = tileLayer->getTileGIDAt(_vec2,nullptr);
     
-    
     int type=0;
     if(gid == 1 || gid ==2 || gid == 15 || gid ==16){
         type=1;
@@ -69,7 +68,11 @@ void BaseMap::removeObject(Vec2 _vec2){
     
     _vec2 = Vec2((int)_vec2.x,(int)_vec2.y);
     
-    tileLayer
+    auto _sprite = (Sprite *)tileLayer->getTileAt(_vec2);
+    
+    if(_sprite){
+        _sprite->removeFromParentAndCleanup(true);
+    }
 }
 
 BaseMap * BaseMap::getInstance(){

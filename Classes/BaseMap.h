@@ -38,7 +38,7 @@ public:
      0和3  可行走点
      */
     int getTypeForPoint(Vec2 _vec2);
-    void removeObject(Vec2 _vec2)
+    void removeObject(Vec2 _vec2);
     static BaseMap * getInstance();
     virtual bool init();
     static Scene * createScene();

@@ -3,7 +3,7 @@
 #include "cocos2d.h"
 using namespace cocos2d;
 //enum class PROP_TYPE{
-//	/**ÔÝÍ£*/
+//	
 //	STOP,
 //	BOMB,
 //	LIFE,
@@ -17,7 +17,7 @@ private:
 public:
 	CC_SYNTHESIZE_READONLY(int, type,Type);
 
-	//Ìí¼ÓµÀ¾ß 
+	//
 	virtual bool init();
 
 	static Prop* create();

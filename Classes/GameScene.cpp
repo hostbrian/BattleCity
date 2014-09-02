@@ -8,7 +8,14 @@
 
 #include "GameScene.h"
 #include "BaseMap.h"
+#include "BulletLayer.h"
 #include "Config.inc.h"
+
+void GameScene::onEnter(){
+    Layer::onEnter();
+    
+    
+}
 
 bool GameScene::init(){
     if (!Layer::init()) {
@@ -20,21 +27,30 @@ bool GameScene::init(){
     this->addChild(bg,-1);
     
     //加载地图
-    MAP = BaseMap::getInstance();
-    this->addChild(MAP,0);
+    TITLEMAP = BaseMap::getInstance();
+    this->addChild(TITLEMAP,0);
     
+    //加载角色控制层
+    auto _roleControl = RoleControl::getInstance();
+    this->addChild(_roleControl);
     
-    auto _listen = EventListenerTouchOneByOne::create();
-    _listen->onTouchBegan = [=](Touch *_touch,Event *_event)->bool{
-        auto i = BaseMap::getInstance()->getTypeForPoint(_touch->getLocation());
-        log("%d",i);
-        return true;
-    };
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_listen, this);
+    //加载子弹控制层
+    auto _bullControl = BulletLayer::getInstance();
+    this->addChild(_bullControl);
     
+//    auto _listen = EventListenerTouchOneByOne::create();
+//    _listen->onTouchBegan = [=](Touch *_touch,Event *_event)->bool{
+//        //auto i =
+////        BaseMap::getInstance()->removeObject(_touch->getLocation());
+//        //log("%d",i);
+//        return true;
+//    };
+//    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_listen, this);
+//    
     
     //加载声音
     MUSIC_CONFIG mc;
+    //加载声音
     CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(mc.GAME_START.c_str());
     
     return true;
