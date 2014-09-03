@@ -15,11 +15,13 @@ using namespace cocos2d;
 
 class BouningBoxLayer: public Layer{
 private:
+    virtual void update(float t);
+    
+    static BouningBoxLayer * instance;
     CREATE_FUNC(BouningBoxLayer);
 public:
     static BouningBoxLayer* getInstanse();
     virtual bool init();
-
 };
 
 #endif /* defined(__BattleCity__BouningBoxLayer__) */

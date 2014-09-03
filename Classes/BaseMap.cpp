@@ -28,13 +28,35 @@ bool BaseMap::init(){
     return true;
 }
 
+Vec2 fixVec2(Vec2 _vec2){
+    if (_vec2.y >= 640 -16) {
+        _vec2.y = 640 -16;
+    }
+    if (_vec2.y <=1 ) {
+        _vec2.y = 16;
+    }
+    if (_vec2.x >= 960-16) {
+        _vec2.x = 960 - 16;
+    }
+    if (_vec2.x <= 16) {
+        _vec2.x =16;
+    }
+    return _vec2;
+}
+
 int BaseMap::getTypeForPoint(Vec2 _vec2){
     auto tileLayer = tileMap->getLayer("BG");
+    
+    
+    _vec2 = fixVec2(_vec2);
+    
     
     _vec2 = Director::getInstance()->convertToUI(_vec2) / 16;
     
     _vec2 = Vec2((int)_vec2.x,(int)_vec2.y);
-    
+    if(_vec2.x < 0 || _vec2.y < 0){
+        return -1;
+    }
     int gid = tileLayer->getTileGIDAt(_vec2,nullptr);
     
     int type=0;
@@ -61,8 +83,34 @@ int BaseMap::getTypeForPoint(Vec2 _vec2){
     return type;
 }
 
-void BaseMap::removeObject(Vec2 _vec2){
+int BaseMap::getTypeForRect(Rect _rect){
+    int justReturn1and2 = -1;
+    for (float x = _rect.getMinX(); x <= _rect.getMaxX(); x += 15 ) {
+        for (float y = _rect.getMinY(); y<= _rect.getMaxY(); y+=15 ) {
+            Vec2 _vec2 = Vec2(x,y);
+            int type = getTypeForPoint(_vec2);
+            if (type == 1 || type==2) {
+                justReturn1and2 = type;
+                break;
+            }
+        }
+        if (justReturn1and2  != -1) {
+            break;
+        }
+    }
+    return justReturn1and2;
+}
+
+void BaseMap::removeObjectForPoint(Vec2 _vec2){
     auto tileLayer = tileMap->getLayer("BG");
+    
+    
+    _vec2 = fixVec2(_vec2);
+    
+    int type = getTypeForPoint(_vec2);
+    if( type != 1 && type !=2 ){
+        return;
+    }
     
     _vec2 = Director::getInstance()->convertToUI(_vec2) / 16;
     
@@ -71,8 +119,19 @@ void BaseMap::removeObject(Vec2 _vec2){
     auto _sprite = (Sprite *)tileLayer->getTileAt(_vec2);
     
     if(_sprite){
-        _sprite->removeFromParentAndCleanup(true);
+        tileLayer->removeChild(_sprite, true);
     }
+}
+
+void BaseMap::removeObjectForRect(Rect _rect){
+    
+    for (float x = _rect.getMinX(); x <= _rect.getMaxX(); x += 15 ) {
+        for (float y = _rect.getMinY(); y<= _rect.getMaxY(); y+=15 ) {
+            Vec2 _vec2 = Vec2(x,y);
+            removeObjectForPoint(_vec2);
+        }
+    }
+
 }
 
 BaseMap * BaseMap::getInstance(){

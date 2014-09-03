@@ -3,19 +3,17 @@
 
 #include "cocos2d.h"
 USING_NS_CC;
+
 #include "BaseEnemy.h"
 
 #define FAST_SPEED 48.0f
-#define FAST_HP 96
+#define FAST_HP 2
 
 class FastTank : public BaseEnemyRole
 {
 public:
-	//
-	CREATE_FUNC(FastTank);
-
-	//
-	virtual bool init();
+    virtual bool init();
+    CREATE_FUNC(FastTank);
 };
 
 #endif // __FAST_TANK_H__

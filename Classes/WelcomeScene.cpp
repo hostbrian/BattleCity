@@ -7,7 +7,6 @@
 //
 
 #include "WelcomeScene.h"
-#include "Config.inc.h"
 #include "VisibleRect.h"
 #include "GameScene.h"
 
@@ -44,6 +43,7 @@ void WelcomeScene::onEnter(){
 void WelcomeScene::onMenuTouch(Ref*ref){
     
 }
+
 bool WelcomeScene::init(){
     if (!Layer::init()) {
         return false;
@@ -52,15 +52,15 @@ bool WelcomeScene::init(){
     //加载素材
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("tankedazhan.plist");
     
-    MUSIC_CONFIG mc;
+    
     //加载音乐缓存
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(mc.GAME_START.c_str() );
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(mc.ADDLIFE.c_str() );
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(mc.BLAST.c_str() );
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(mc.BULLET.c_str() );
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(mc.GAMEOVER.c_str() );
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(mc.MOVE.c_str() );
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(mc.BOMB.c_str() );
+    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("02 start.aif");
+//    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(MUSIC_CONFIG::ADDLIFE.c_str() );
+    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("blast.aif");
+    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("bullet.aif");
+//    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(MUSIC_CONFIG::GAMEOVER.c_str() );
+    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("move.aif" );
+//    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(MUSIC_CONFIG::BOMB.c_str() );
     
     return true;
 }

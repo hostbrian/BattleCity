@@ -1,6 +1,5 @@
 #include "FastTank.h"
 
-// ÷ÿ–¥ init ≥ı ºªØ
 bool FastTank::init(){
 	if (!BaseEnemyRole::init("enemy2.png", FAST_HP, FAST_SPEED))
 	{

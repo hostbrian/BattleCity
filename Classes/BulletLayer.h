@@ -23,18 +23,17 @@ private:
 
     virtual void onEnter();
     virtual bool init();
-    virtual void update(float t);
-protected:
+
 	/**MainPlayer 敌机类**/
-    CC_SYNTHESIZE_PASS_BY_REF(Vector<BaseBullet *>, enemyBullVector,EnemyBulletVector);
+    CC_SYNTHESIZE(Vector<BaseBullet *>, enemyBullVector,EnemyBulletVector);
     /**MainPlayer 主角类**/
-    CC_SYNTHESIZE_PASS_BY_REF(Vector<BaseBullet *>, playerBullVector, PlayerBulletVector);
+    CC_SYNTHESIZE(Vector<BaseBullet *>, playerBullVector, PlayerBulletVector);
 public:
     static BulletLayer * getInstance();
     
-    void createEnemyBullet(BaseEnemyRole *player);
-    void createPlayerBullet(PlayerRole *player);
-    void removeRole(BaseBullet* _bullet,std::string type);
+    void createEnemyBullet(BaseRole *player);
+    void createPlayerBullet(BaseRole *player);
+    void removeBullet(BaseBullet* _bullet,std::string type);
 };
 
 #endif /* defined(__BattleCity__BulletLayer__) */

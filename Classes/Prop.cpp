@@ -19,7 +19,9 @@ bool Prop:: init()
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("tankedazhan.plist");
 	
    std::string filename;
-   int num =  rand()%5+1;
+    unsigned int i;
+    srand(i);
+   int num =  random()%5+1;
    type = num;
    //出现道具 
    switch(type)

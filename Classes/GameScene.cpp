@@ -9,7 +9,8 @@
 #include "GameScene.h"
 #include "BaseMap.h"
 #include "BulletLayer.h"
-#include "Config.inc.h"
+//#include "Config.inc.h"
+#include "BouningBoxLayer.h"
 
 void GameScene::onEnter(){
     Layer::onEnter();
@@ -38,20 +39,12 @@ bool GameScene::init(){
     auto _bullControl = BulletLayer::getInstance();
     this->addChild(_bullControl);
     
-//    auto _listen = EventListenerTouchOneByOne::create();
-//    _listen->onTouchBegan = [=](Touch *_touch,Event *_event)->bool{
-//        //auto i =
-////        BaseMap::getInstance()->removeObject(_touch->getLocation());
-//        //log("%d",i);
-//        return true;
-//    };
-//    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_listen, this);
-//    
+    //加载碰撞层
+    auto _bouningBox = BouningBoxLayer::getInstanse();
+    this->addChild(_bouningBox);
     
     //加载声音
-    MUSIC_CONFIG mc;
-    //加载声音
-    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(mc.GAME_START.c_str());
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("02 start.aif");
     
     return true;
 }

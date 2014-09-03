@@ -1,68 +1,106 @@
 #include "BaseBullet.h"
 #include "ControlLayer.h"
+#include "BulletLayer.h"
 
 
 void BaseBullet::onEnter(){
     Sprite::onEnter();
     
-    
+    this->setContentSize(Size(32,32));
 }
 
-bool BaseBullet::init(int speed,int bulletState,const string fileName,Vec2 position,int bulletDir){
-	if (!Sprite::initWithFile(fileName)){
+bool BaseBullet::init(int speed,int bulletState,const string fileName, BaseRole * player){
+    
+	if (!Sprite::initWithSpriteFrameName(fileName)){
 		return false;
 	}
     
+    speed = 300;
+    
+    int roleDirection = 0;
+    Vec2 position = player->getPosition();
+	Size vsize = Director::getInstance()->getVisibleSize();
+    vsize.width = 960;
+    
+    this->setPlayer(player);
+    this->type = player->getRoleType();
+    
+    
+    this->setContentSize(Size(32,32));
+    
     
 	//设置子弹的位置
-	this->setPosition(position);
+	this->setPosition(player->getPositionX(),
+                      player->getPositionY()
+                      );
     
-	Size vsize = Director::getInstance()->getVisibleSize();
+    roleDirection = this->player->getFace();
+
+    if (player->getRoleType() == "enemy") {
+    }else if (player->getRoleType() == "player"){
+        roleDirection = this->player->getFace();
+    }
     
 	//0,1,2,3分别为上，下，左，右
     Vec2 v2;
 	float dis;
-	if (bulletDir == 0)
-	{
+    
+	if (roleDirection == 0)
+	{//上
 		dis = vsize.height-position.y;
-        v2= Vec2(0, dis);
-	}
-	if (bulletDir == 1)
-    {
+        v2= Vec2(player->getPositionX(), vsize.height);
+	}else if (roleDirection == 1)
+    {//下
+        this->setRotation(180);
 		dis = position.y;
-		v2 = Vec2(0,-position.y-this->getContentSize().height/2);
-	}
-	if (bulletDir == 2)
-	{
+		v2 = Vec2(player->getPositionX(),0);
+	}else if (roleDirection == 2)
+	{//左
+        this->setRotation(270);
 		dis = position.x;
-		v2 = Vec2(-position.x-this->getContentSize().width/2,0);
-	}
-	if (bulletDir == 3)
-	{
+		v2 = Vec2(0,player->getPositionY());
+	}else if (roleDirection == 3)
+	{//右
+        this->setRotation(90);
 		dis = vsize.width - position.x;
-		v2 = Vec2(vsize.width-position.x+this->getContentSize().width/2,0);
+		v2 = Vec2(vsize.width,player->getPositionY());
 	}
     
+    float _time = dis/speed;
+    if (_time <=0) {
+        _time = 0.1f;
+    }
+//    log("_time:%.2f,dis:%.2f,speed:%d",_time,dis,speed);
+    auto _moveTo = MoveTo::create(_time,v2);
+    auto _callfun = CallFunc::create([=](){
+        
+        BulletLayer::getInstance()->removeBullet(this, this->type);
+        
+    });
     
-    auto _moveBy = MoveBy::create(dis/speed,v2);
+    auto _delayTime = DelayTime::create(_time);
+
+    this->runAction(
+          Sequence::create(_moveTo,_callfun, NULL)
+    );
     
-    log("v2:{%.2f,%.2f}",v2.x,v2.y);
-    log("子弹位置:{%.2f,%.2f},dis:%.2f,bulletDir:%d",this->getPositionX(),this->getPositionY(),dis,bulletDir);
-	
-    this->runAction(_moveBy);
+    this->runAction(Sequence::create(_delayTime,_callfun, NULL));
     
 	return true;
 }
 
-BaseBullet * BaseBullet::create(PlayerRole * _player,std::string type){
-    auto bullet = BaseBullet::create(100,1,"Q3.png",_player->getPosition(),(int)_player->getDirection());
-    bullet->setPlayer(_player);
+BaseBullet * BaseBullet::create(BaseRole * _player,std::string type){
+    
+    //子弹的声音
+    //CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("bullet.aif");
+
+    auto bullet = BaseBullet::create(300,1,"bullet.png",_player);
     return bullet;
 }
 
-BaseBullet * BaseBullet::create(int speed,int bulletState,const string fileName,Vec2 v,int bulletDir){
+BaseBullet * BaseBullet::create(int speed,int bulletState,const string fileName,BaseRole * _player){
 	auto bullet = new BaseBullet();
-	if (bullet && bullet->init(speed,bulletState,fileName,v,bulletDir))
+	if (bullet && bullet->init(speed,bulletState,fileName,_player))
 	{
 		bullet->autorelease();
 		return bullet;

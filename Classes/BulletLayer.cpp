@@ -15,23 +15,24 @@ BulletLayer* BulletLayer::instance = nullptr;
 void BulletLayer::onEnter(){
     Layer::onEnter();
     
-    this->scheduleUpdate();
 }
 
-void BulletLayer::createEnemyBullet(BaseEnemyRole *player){
-    auto bullet =  BaseBullet::create((Sprite*)player,"enemy");
+void BulletLayer::createEnemyBullet(BaseRole *player){
+    auto bullet =  BaseBullet::create(player,"enemy");
     
-    playerBullVector.pushBack(bullet);
+    enemyBullVector.pushBack(bullet);
     
     this->addChild(bullet);
 }
 
-void BulletLayer::createPlayerBullet(PlayerRole *player){
-    auto bullet =  BaseBullet::create(player,"player");
-    
-    playerBullVector.pushBack(bullet);
-    
-    this->addChild(bullet);
+void BulletLayer::createPlayerBullet(BaseRole *player){
+    if(playerBullVector.size() < 3){
+        auto bullet =  BaseBullet::create(player,"player");
+            
+        playerBullVector.pushBack(bullet);
+        
+        this->addChild(bullet);
+    }
 }
 
 bool overScene(float xx, float yy){
@@ -45,19 +46,6 @@ bool overScene(float xx, float yy){
     return true;
 }
 
-void BulletLayer::update(float t){
-//    for (auto &enemyBull : enemyBullVector) {
-//        if (overScene(enemyBull->getPositionX(),enemyBull->getPositionY())) {
-//            removeRole(enemyBull,"enemy");
-//        }
-//    }
-//    
-//    for (auto &playerull : playerBullVector) {
-//        if (overScene(playerull->getPositionX(),playerull->getPositionY())) {
-//            removeRole(playerull,"player");
-//        }
-//    }
-}
 
 bool BulletLayer::init(){
     if (!Layer::init()) {
@@ -66,13 +54,18 @@ bool BulletLayer::init(){
     return true;
 }
 
-void BulletLayer::removeRole(BaseBullet* _bullet,std::string type){
+void BulletLayer::removeBullet(BaseBullet* _bullet,std::string type){
     if (type=="enemy") {
         enemyBullVector.eraseObject(_bullet);
+        
+        if (!_bullet->getPlayer()->getDie()) {
+            BulletLayer::getInstance()->createEnemyBullet(_bullet->getPlayer());
+        }
+                
     }else if (type =="player"){
         playerBullVector.eraseObject(_bullet);
     }
-    _bullet->removeAllChildrenWithCleanup(true);
+    _bullet->removeFromParentAndCleanup(true);
 }
 
 BulletLayer * BulletLayer::getInstance(){

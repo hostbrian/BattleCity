@@ -1,9 +1,11 @@
 #ifndef __CONTROLLAYER_H_
 #define __CONTROLLAYER_H_
+
 #include "cocos2d.h"
+USING_NS_CC;
+
 class PlayerRole;
 class DirectionKey;
-USING_NS_CC;
 
 class ControlLayer:public Layer
 {
@@ -14,7 +16,7 @@ public:
 protected:
 	void tankMove();
 	PlayerRole * tank;
-	DirectionKey *dirKey;
+//	DirectionKey *dirKey;
 	Size vsize;
 	
 };
